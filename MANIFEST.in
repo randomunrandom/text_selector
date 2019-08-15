@@ -1,0 +1,2 @@
+recursive-include text_selector/static *.*
+include text_selector.json
