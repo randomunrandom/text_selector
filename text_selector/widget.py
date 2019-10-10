@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from traitlets import HasTraits, Unicode, List, Int, Any, Dict, observe
+from traitlets import HasTraits, Unicode, List, Int, Any, Dict, observe, Undefined
 
 @widgets.register
 class Widget(widgets.DOMWidget, HasTraits):
@@ -14,26 +14,10 @@ class Widget(widgets.DOMWidget, HasTraits):
     callback = Any()
     n = Int(3).tag(sync=True)
     res = Dict({}).tag(sync=True)
-    # class Selected(HasTraits):
-        # contains = List().tag(sync=True)
-    # selected = Selected()#.tag(sync=True)
 
     def __init__(self, tags=tags, txts=txts, callback=callback, n=n):
         super(Widget, self).__init__()
         self.tags = tags
         self.txts = txts
         self.n = n
-        # for i in range(len(self.txts)):
-            # self.res.append({})
-        # self.selected.observe(callback, names=['contains'])
-        # self.selected.contains = ["aaa"]
-    
-    # @observe('res')
-    # def _observe_res(self, change):
-        # print(change['old'])
-        # print(change['new'])
-        # self.callback(change)
-
-
-        
-
+        self.observe(callback, names=['res'])

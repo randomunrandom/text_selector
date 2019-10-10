@@ -121,16 +121,15 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
           let splits = range.split(':');
           let left = splits[0];
           let right = splits[1];
+          let color;
           if ((i >= left) && (i <= right)) {
-            let color = this.colors[this.tags.indexOf(this.res[id][range])]
+            try {
+              color = this.colors[this.tags.indexOf(this.res[id][range])]
+            } catch(e) {
+              color = 'red';
+            }
             tmp.style.background = color;
           }
-          // for (let j = left; j <= right; j++) {
-            // console.log(id, '\t', j);
-            // let tmp_el = document.getElementById(`TSW-txt-${id}-letter-${j}`);
-            // sentence += tmp_el.innerText;
-            // tmp_el.style.background = 'red';
-          // }
         });
       }
       dom_txt.appendChild(tmp);
@@ -157,8 +156,27 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       // add.classList.add('btn-light');
       add.onclick = () => {
         let selection = window.getSelection();
-        let start = parseInt(selection.anchorNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
-        let end = parseInt(selection.focusNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
+        let start;
+        try {
+          start = parseInt(selection.anchorNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
+        } catch(e) {
+          strart = 'NaN'
+          return
+          console.log('return doesn\'t work');
+          // break
+        }
+        if (start == 'NaN') return
+        let end;
+        try {
+          end = parseInt(selection.focusNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
+        } catch(e) {
+          end = 'NaN'
+          return
+          console.log('return doesn\'t work');
+          // break
+        }
+        if (end == 'NaN') return
+        if ((''+start == 'NaN') || (''+end == 'NaN')) return
         let left, right;
         if (start < end) {
           left = start;
@@ -176,9 +194,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         if (!(i in this.res)) {
           this.res[i] = {};
         }
-        this.res[i][left + ":" + right] = this.tag;
+        this.res[i][left.toString() + ":" + right.toString()] = this.tag;
         this.model.set("res", this.res);
         this.model.save();
+        this.model.save_changes();
         console.log(
           JSON.stringify(this.res),
           "\t",
