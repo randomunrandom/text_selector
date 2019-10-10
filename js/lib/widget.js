@@ -162,8 +162,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         } catch(e) {
           strart = 'NaN'
           return
-          console.log('return doesn\'t work');
-          // break
         }
         if (start == 'NaN') return
         let end;
@@ -172,8 +170,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         } catch(e) {
           end = 'NaN'
           return
-          console.log('return doesn\'t work');
-          // break
         }
         if (end == 'NaN') return
         if ((''+start == 'NaN') || (''+end == 'NaN')) return
