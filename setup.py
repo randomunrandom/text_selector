@@ -77,14 +77,13 @@ class NPM(Command):
         pass
 
     def get_npm_name(self):
-        npmName = 'npm';
+        npmName = 'npm'
         if platform.system() == 'Windows':
-            npmName = 'npm.cmd';
-            
-        return npmName;
+            npmName = 'npm.cmd'
+        return npmName
     
     def has_npm(self):
-        npmName = self.get_npm_name();
+        npmName = self.get_npm_name()
         try:
             check_call([npmName, '--version'])
             return True
@@ -106,8 +105,8 @@ class NPM(Command):
 
         if self.should_run_npm_install():
             log.info("Installing build dependencies with npm.  This may take a while...")
-            npmName = self.get_npm_name();
-            check_call([npmName, 'install'], cwd=node_root, stdout=sys.stdout, stderr=sys.stderr)
+            npmName = self.get_npm_name()
+            check_call([npmName, 'install', '--unsafe-perm'], cwd=node_root, stdout=sys.stdout, stderr=sys.stderr)
             os.utime(self.node_modules, None)
 
         for t in self.targets:
@@ -127,7 +126,7 @@ with open(os.path.join(here, 'text_selector', '_version.py')) as f:
 setup_args = {
     'name': 'text_selector',
     'version': version_ns['__version__'],
-    'description': 'A Custom Jupyter Widget Library',
+    'description': 'A Custom Jupyter Widget Library for selecting text and asciening tag to selected span',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
