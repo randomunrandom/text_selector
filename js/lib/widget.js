@@ -194,11 +194,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         this.model.set("res", this.res);
         this.model.save();
         this.model.save_changes();
-        console.log(
-          JSON.stringify(this.res),
-          "\t",
-          JSON.stringify(this.model.get("res"))
-        );
       };
       control.appendChild(add);
 
@@ -220,10 +215,26 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       // rem.classList.add('btn');
       // rem.classList.add('btn-light');
       rem.innerText = "Reset";
-      rem.onclick = () => {};
+      rem.onclick = () => {
+        if (i in this.res) {
+          for (let key in this.res[i]) {
+            console.log(key, '\t', this.res[i][key]);
+            let splits = key.split(':');
+            let left = splits[0];
+            let right = splits[1];
+            for(let j=left; j<=right; j++) {
+              let tmp_el = document.getElementById(`TSW-txt-${i}-letter-${j}`);
+              tmp_el.style.background = '';
+            }
+          }
+          delete this.res[i];
+        }
+        this.model.set("res", this.res);
+        this.model.save();
+        this.model.save_changes();
+      };
       control.appendChild(rem);
       text.appendChild(control);
-      // if (i >= this.n) text.style.display = "none";
       dom_el.appendChild(text);
     }
     return dom_el;
