@@ -7,218 +7,142 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     _view_name: "TSWidgetView",
     _model_module: "text_selector",
     _view_module: "text_selector",
-    _model_module_version: "0.0.0",
-    _view_module_version: "0.0.0",
+    _model_module_version: "2.0.0",
+    _view_module_version: "2.0.0",
+    widget_id: -1,
     tags: [],
-    txts: [],
+    txt: '',
     colors: [],
-    n: 3,
-    res: {}
+    res: []
   })
 });
 
 var TSWidgetView = widgets.DOMWidgetView.extend({
-  // value_changed: function() {
-    // this.res = this.model.get("res");
-  // },
   render() {
-    this.txts = this.model.get("txts");
+    this.widget_id = this.model.get('widget_id');
     this.tags = this.model.get("tags");
+    this.txt = this.model.get("txt");
     this.colors = this.model.get("colors");
-    this.n = this.model.get("n");
     this.res = this.model.get("res");
 
-    this.model.on("change:res", this.res_changed, this);
-    this.tag = this.tags[0];
-    this.color = this.colors[0];
-    this.page = 0;
-    this.pages = Math.ceil(this.txts.length / this.n);
-
+    this.selected_tag_id = 0;
 
     this.box = document.createElement("div");
-    // this.box.classList.add('container');
-    this.box.id = "TS-box";
+    this.box.id = `TSW-widget-${this.widget_id}`;
     this.box.style.border = "1px solid black";
     this.box.style.padding = "1%";
 
-    this.pagination = document.createElement("div");
-
-    this.prev = document.createElement("button");
-    this.prev.innerText = "Prev";
-    // this.prev.classList.add('btn');
-    // this.prev.classList.add('btn-light');
-    this.prev.onclick = () => {
-      this.page = Math.max(0, this.page - 1);
-      this.cur_page.innerText = `${this.page + 1}/${this.pages}`;
-
-      while (this.text.hasChildNodes()) {
-        this.text.removeChild(this.text.lastChild);
-      }
-      this.text.appendChild(this.create_txts());
-    };
-    this.pagination.appendChild(this.prev);
-
-    this.cur_page = document.createElement("span");
-    this.cur_page.innerText = `${this.page + 1}/${this.pages}`;
-    this.cur_page.id = "TS-cur-page";
-    this.pagination.appendChild(this.cur_page);
-
-    this.next = document.createElement("button");
-    this.next.innerText = "Next";
-    // this.next.classList.add('btn');
-    // this.next.classList.add('btn-light');
-    this.next.classList.add("col");
-    this.next.onclick = () => {
-      this.page = Math.min(this.pages - 1, this.page + 1);
-      this.cur_page.innerText = `${this.page + 1}/${this.pages}`;
-
-      while (this.text.hasChildNodes()) {
-        this.text.removeChild(this.text.lastChild);
-      }
-      this.text.appendChild(this.create_txts());
-    };
-    this.pagination.appendChild(this.next);
-    this.box.appendChild(this.pagination);
-
-    this.text = document.createElement("div");
-    this.text.appendChild(this.create_txts());
-
-    this.box.appendChild(this.text);
+    this.box.appendChild(this.create_controls());
+    this.box.appendChild(this.create_txt());
     this.el.appendChild(this.box);
   },
-  create_txt(id) {
-    let txt = this.txts[id];
+  create_txt() {
     let dom_txt = document.createElement("div");
+    dom_txt.id = `TSW-widget-${this.widget_id}-txt`;
     dom_txt.style.border = "1px solid gray";
     dom_txt.style.margin = "1% 0";
-    this.res = this.model.get("res");
-    for (let i = 0; i < txt.length; i++) {
+    for (let i = 0; i < this.txt.length; i++) {
       let tmp = document.createElement("span");
-      tmp.innerText = txt.charAt(i);
-      tmp.id = `TSW-txt-${id}-letter-${i}`;
-      if (id in this.res) {
-        Object.keys(this.res[id]).forEach(range => {
-          let splits = range.split(':');
-          let left = splits[0];
-          let right = splits[1];
-          let color;
-          if ((i >= left) && (i <= right)) {
-            try {
-              color = this.colors[this.tags.indexOf(this.res[id][range])]
-            } catch(e) {
-              color = 'red';
-            }
-            tmp.style.background = color;
-          }
-        });
-      }
+      tmp.innerText = this.txt.charAt(i);
+      tmp.id = `TSW-widget-${this.widget_id}-letter-${i}`;
       dom_txt.appendChild(tmp);
+    }
+    for(r of this.res){
+      for(let i = r['start']; i<= r['end']; i++) {
+        let letter = dom_txt.querySelector(`#TSW-widget-${this.widget_id}-letter-${i}`);
+        letter.style.background = this.colors[this.tags.indexOf(r['tag'])];
+      }
     }
     return dom_txt;
   },
-  create_txts() {
-    let dom_el = document.createElement("div");
-    for (
-      let i = this.page * this.n;
-      i <= Math.min(this.n * (this.page + 1) - 1, this.txts.length - 1);
-      i++
-    ) {
-      console.log(i);
-      text = document.createElement("div");
-      text.id = `TSW-text-${i}`;
-      let txt = this.create_txt(i);
-      text.appendChild(txt);
+  create_controls() {
+    let dom_controls = document.createElement("div");
+    dom_controls.id = `TSW-widget-${this.widget_id}-controls`;
 
-      let control = document.createElement("div");
-      let add = document.createElement("button");
-      add.innerText = "Add";
-      // add.classList.add('btn');
-      // add.classList.add('btn-light');
-      add.onclick = () => {
-        let selection = window.getSelection();
-        let start;
-        try {
-          start = parseInt(selection.anchorNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
-        } catch(e) {
-          strart = 'NaN'
-          return
-        }
-        if (start == 'NaN') return
-        let end;
-        try {
-          end = parseInt(selection.focusNode.parentNode.id.replace(/TSW-txt-\d+-letter-/i, ""), 10);
-        } catch(e) {
-          end = 'NaN'
-          return
-        }
-        if (end == 'NaN') return
-        if ((''+start == 'NaN') || (''+end == 'NaN')) return
-        let left, right;
-        if (start < end) {
-          left = start;
-          right = end;
-        } else {
-          left = end;
-          right = start;
-        }
-        // let sentence = "";
-        for (let j = left; j <= right; j++) {
-          let tmp_el = document.getElementById(`TSW-txt-${i}-letter-${j}`);
-          // sentence += tmp_el.innerText;
-          tmp_el.style.background = this.color;
-        }
-        if (!(i in this.res)) {
-          this.res[i] = {};
-        }
-        this.res[i][left.toString() + ":" + right.toString()] = this.tag;
-        this.model.set("res", this.res);
-        this.model.save();
-        this.model.save_changes();
-      };
-      control.appendChild(add);
-
-      select_tag = document.createElement("select");
-      select_tag.id = "selector";
-      this.tags.forEach((el, idx) => {
-        let tag_dom_el;
-        tag_dom_el = document.createElement("option");
-        tag_dom_el.innerText = el;
-        tag_dom_el.onclick = () => {
-          this.tag = el;
-          this.color = this.colors[idx];
-        };
-        select_tag.appendChild(tag_dom_el);
+    let add = document.createElement("button");
+    add.id = `TSW-widget-${this.widget_id}-add`;
+    add.innerText = "Add";
+    add.classList.add('btn');
+    add.onclick = () => {
+      let selection = window.getSelection();
+      let selected_id;
+      try {
+        selected_id = selection.anchorNode.parentNode.id.replace('TSW-widget-', '').replace('-letter-\d+', '');
+        selected_id = parseInt(selected_id, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      if (selected_id !== this.widget_id) return 
+      let start, end, left, right;
+      try {
+        start = selection.anchorNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
+        start = parseInt(start, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      try {
+        end = selection.focusNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
+        end = parseInt(end, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      if (start < end) {
+        left = start;
+        right = end;
+      } else {
+        left = end;
+        right = start;
+      }
+      for (let i = left; i <= right; i++) {
+        let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+        tmp_el.style.background = this.colors[this.selected_tag_id];
+      }
+      this.res.push({
+        start: left,
+        end: right,
+        tag: this.tags[this.selected_tag_id]
       });
-      control.appendChild(select_tag);
+      this.model.set("res", this.res);
+      this.model.save();
+      this.model.save_changes();
+    };
+    dom_controls.appendChild(add);
 
-      let rem = document.createElement("button");
-      // rem.classList.add('btn');
-      // rem.classList.add('btn-light');
-      rem.innerText = "Reset";
-      rem.onclick = () => {
-        if (i in this.res) {
-          for (let key in this.res[i]) {
-            console.log(key, '\t', this.res[i][key]);
-            let splits = key.split(':');
-            let left = splits[0];
-            let right = splits[1];
-            for(let j=left; j<=right; j++) {
-              let tmp_el = document.getElementById(`TSW-txt-${i}-letter-${j}`);
-              tmp_el.style.background = '';
-            }
-          }
-          delete this.res[i];
-        }
-        this.model.set("res", this.res);
-        this.model.save();
-        this.model.save_changes();
+    select_tag = document.createElement("select");
+    select_tag.id = "TSW-selector";
+    this.tags.forEach((el, idx) => {
+      let tag_dom_el;
+      tag_dom_el = document.createElement("option");
+      tag_dom_el.innerText = el;
+      tag_dom_el.onclick = () => {
+        this.selected_tag_id = idx;
       };
-      control.appendChild(rem);
-      text.appendChild(control);
-      dom_el.appendChild(text);
-    }
-    return dom_el;
-  }
+      select_tag.appendChild(tag_dom_el);
+    });
+    dom_controls.appendChild(select_tag);
+
+    let rem = document.createElement("button");
+    rem.id = 'TSW-rem'
+    rem.classList.add('btn');
+    rem.innerText = "Reset";
+    rem.onclick = () => {
+      for (r of this.res) {
+        for(let i = r['start']; i<= r['end']; i++) {
+          let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+          tmp_el.style.background = '';
+        }
+      }
+      this.res = [];
+      this.model.set("res", this.res);
+      this.model.save();
+      this.model.save_changes();
+    };
+    dom_controls.appendChild(rem);
+    return dom_controls;
+  },
 });
 
 module.exports = {
