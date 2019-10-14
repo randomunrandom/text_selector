@@ -11,6 +11,7 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     _view_module_version: "0.0.0",
     tags: [],
     txts: [],
+    colors: [],
     n: 3,
     res: {}
   })
@@ -23,31 +24,16 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
   render() {
     this.txts = this.model.get("txts");
     this.tags = this.model.get("tags");
+    this.colors = this.model.get("colors");
     this.n = this.model.get("n");
     this.res = this.model.get("res");
 
-    this.colors = this.create_colors(this.tags.length);
     this.model.on("change:res", this.res_changed, this);
     this.tag = this.tags[0];
     this.color = this.colors[0];
     this.page = 0;
     this.pages = Math.ceil(this.txts.length / this.n);
 
-    // if (this.res.length !== this.txts.length) {
-    // this.res = [];
-    // for(let i = 0; i<this.txts.length; i++) {
-    // this.res[i] = {};
-    // this.res[i] = [];
-    // }
-    // console.log(JSON.stringify(this.res));
-    // this.model.set('res', this.res);
-    // this.model.save();
-    // }
-    // console.log(this.res);
-    // this.model.set('res', JSON.stringify(this.res));
-    // this.model.set('res', this.res);
-    // this.model.save_changes();
-    // console.log(this.model.get('res'));
 
     this.box = document.createElement("div");
     // this.box.classList.add('container');
@@ -99,12 +85,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     this.box.appendChild(this.text);
     this.el.appendChild(this.box);
-    // for (let i = 0; i < this.n; i++) {
-      // let el = document.getElementById(`TSW-text-${i}`);
-      // if (el !== null) {
-        // el.style.display = "none";
-      // }
-    // }
   },
   create_txt(id) {
     let txt = this.txts[id];
@@ -162,8 +142,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         } catch(e) {
           strart = 'NaN'
           return
-          console.log('return doesn\'t work');
-          // break
         }
         if (start == 'NaN') return
         let end;
@@ -172,8 +150,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         } catch(e) {
           end = 'NaN'
           return
-          console.log('return doesn\'t work');
-          // break
         }
         if (end == 'NaN') return
         if ((''+start == 'NaN') || (''+end == 'NaN')) return
@@ -198,11 +174,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         this.model.set("res", this.res);
         this.model.save();
         this.model.save_changes();
-        console.log(
-          JSON.stringify(this.res),
-          "\t",
-          JSON.stringify(this.model.get("res"))
-        );
       };
       control.appendChild(add);
 
@@ -224,28 +195,29 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       // rem.classList.add('btn');
       // rem.classList.add('btn-light');
       rem.innerText = "Reset";
-      rem.onclick = () => {};
+      rem.onclick = () => {
+        if (i in this.res) {
+          for (let key in this.res[i]) {
+            console.log(key, '\t', this.res[i][key]);
+            let splits = key.split(':');
+            let left = splits[0];
+            let right = splits[1];
+            for(let j=left; j<=right; j++) {
+              let tmp_el = document.getElementById(`TSW-txt-${i}-letter-${j}`);
+              tmp_el.style.background = '';
+            }
+          }
+          delete this.res[i];
+        }
+        this.model.set("res", this.res);
+        this.model.save();
+        this.model.save_changes();
+      };
       control.appendChild(rem);
       text.appendChild(control);
-      // if (i >= this.n) text.style.display = "none";
       dom_el.appendChild(text);
     }
     return dom_el;
-  },
-  create_colors(len) {
-    let color = 0;
-    let colors = [];
-    let max_color = Math.pow(16, 6);
-
-    let beg_color = Math.floor(Math.random() * max_color);
-    for (let i = 0; i < len; i++) {
-      // color = Math.floor((beg_color + i*Math.floor(max_color / len)) / max_color);
-      color = (beg_color + i * Math.floor(max_color / len)) % max_color;
-      color = color.toString(16);
-      colors[i] = `#${color}`;
-    }
-
-    return colors;
   }
 });
 
