@@ -7,8 +7,8 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     _view_name: "TSWidgetView",
     _model_module: "text_selector",
     _view_module: "text_selector",
-    _model_module_version: "2.0.1",
-    _view_module_version: "2.0.1",
+    _model_module_version: "2.0.2",
+    _view_module_version: "2.0.2",
     widget_id: -1,
     tags: [],
     txt: '',
@@ -65,6 +65,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     add.classList.add('btn');
     add.onclick = () => {
       let selection = window.getSelection();
+      console.log(selection);
       let selected_id;
       try {
         selected_id = selection.anchorNode.parentNode.id.replace('TSW-widget-', '').replace('-letter-\d+', '');
@@ -89,6 +90,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         console.log('error in parsing selection ', e)
         return
       }
+      console.log(start, end);
       if (start < end) {
         left = start;
         right = end;

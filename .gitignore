@@ -4,6 +4,7 @@ dist/
 build/
 *.py[cod]
 node_modules/
+.mypy_cache
 
 # Compiled javascript
 text_selector/static/
