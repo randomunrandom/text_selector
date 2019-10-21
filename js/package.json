@@ -1,6 +1,6 @@
 {
   "name": "text_selector",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A Custom Jupyter Widget Library",
   "author": "Danil Kireev",
   "main": "lib/index.js",
