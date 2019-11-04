@@ -64,7 +64,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     add.innerText = "Add";
     add.classList.add('btn');
     add.onclick = () => {
-      console.log(this.selected_tag_id);
+      // console.log(this.selected_tag_id);
       let selection = window.getSelection();
       let selected_id;
       try {
@@ -112,10 +112,15 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     };
     dom_controls.appendChild(add);
 
-    select_tag = document.createElement("select");
-    select_tag.id = "TSW-selector";
+    select = document.createElement("select");
+    select.id = `TSW-widget-${this.widget_id}-select`;
+    select.onchange = () => {
+      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
+      console.log(selected);
+      this.selected_tag_id = selected;
+    };
     this.tags.forEach((item, idx) => {
-      console.log(item, idx);
+      // console.log(item, idx);
       let tag_dom_el;
       tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
@@ -123,9 +128,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       tag_dom_el.onclick = () => {
         this.selected_tag_id = idx;
       }
-      select_tag.appendChild(tag_dom_el);
+      select.appendChild(tag_dom_el);
     });
-    dom_controls.appendChild(select_tag);
+    dom_controls.appendChild(select);
 
     let rem = document.createElement("button");
     rem.id = 'TSW-rem'

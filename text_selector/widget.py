@@ -14,7 +14,7 @@ class Widget(widgets.DOMWidget, HasTraits):
     _model_module_version = Unicode('^2.0.2').tag(sync=True)
     widget_id = Int(-1).tag(sync=True)
 
-    tags = List().tag(sync=True)
+    tags = List([]).tag(sync=True)
     txt = Unicode('').tag(sync=True)
     colors = List([]).tag(sync=True)
     callback = Any()
