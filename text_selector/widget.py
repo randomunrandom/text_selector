@@ -4,7 +4,17 @@ from traitlets import HasTraits, Unicode, List, Int, Any, observe
 
 @widgets.register
 class Widget(widgets.DOMWidget, HasTraits):
-    id = 1
+    """Jupyter widget for selecting part of txt and assingning it on of tags.
+
+    Attributes:
+        widget_id (int): ID of widgets instance.
+        tags (list of str): list of tags.
+        txt (str): text to display.
+        colors (list of str): list of colors.
+        callback (function): function which gets envoked when new tag gets selected.
+        res (list of dict): list with all selected tags.
+    """
+    __id = 1
 
     _view_name = Unicode('TSWidgetView').tag(sync=True)
     _model_name = Unicode('TSWidgetModel').tag(sync=True)
@@ -12,6 +22,7 @@ class Widget(widgets.DOMWidget, HasTraits):
     _model_module = Unicode('text_selector').tag(sync=True)
     _view_module_version = Unicode('^2.0.2').tag(sync=True)
     _model_module_version = Unicode('^2.0.2').tag(sync=True)
+
     widget_id = Int(-1).tag(sync=True)
 
     tags = List([]).tag(sync=True)
@@ -23,8 +34,8 @@ class Widget(widgets.DOMWidget, HasTraits):
     def __init__(self, tags=[], txt='', colors=None, callback=None):
         super(Widget, self).__init__()
 
-        self.widget_id = Widget.id
-        Widget.id += 1
+        self.widget_id = Widget.__id
+        Widget.__id += 1
 
         if len(txt) == 0: raise ValueError("txt shouldn't be an empty string")
         self.txt = txt
