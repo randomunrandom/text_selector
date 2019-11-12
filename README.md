@@ -3,6 +3,12 @@ text_selector
 
 A Custom Jupyter Widget for selecting part of text and assingning it one of tags.
 
+Usage:
+------
+
+An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)
+Note^ if you have less than 10 tags you don't need to pass colors, otherwise you have too.
+
 Installation
 ------------
 
