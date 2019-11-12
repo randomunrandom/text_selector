@@ -5,6 +5,7 @@ build/
 *.py[cod]
 node_modules/
 .mypy_cache
+*/**/__pycache__
 
 # Compiled javascript
 text_selector/static/
