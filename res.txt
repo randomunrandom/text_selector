@@ -1,1 +1,1 @@
-{'0': {'3:9': 'protein', '15:20': 'protein', '50:58': 'protein'}, '2': {'157:166': 'protein'}}
+[{'start': 15, 'end': 20, 'tag': 'DNA'}, {'start': 4, 'end': 8, 'tag': 'protein'}, {'start': 4, 'end': 8, 'tag': 'protein'}, {'start': 113, 'end': 123, 'tag': 'RNA'}]

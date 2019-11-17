@@ -4,29 +4,42 @@ from traitlets import HasTraits, Unicode, List, Int, Any, observe
 
 @widgets.register
 class Widget(widgets.DOMWidget, HasTraits):
-    id = 0
+    """Jupyter widget for selecting part of txt and assingning it on of tags.
+
+    Attributes:
+        widget_id (int): ID of widgets instance.
+        tags (list of str): list of tags.
+        txt (str): text to display.
+        colors (list of str): list of colors.
+        callback (function): function which gets envoked when new tag gets selected.
+        res (list of dict): list with all selected tags.
+    """
+    __id = 1
+
     _view_name = Unicode('TSWidgetView').tag(sync=True)
     _model_name = Unicode('TSWidgetModel').tag(sync=True)
     _view_module = Unicode('text_selector').tag(sync=True)
     _model_module = Unicode('text_selector').tag(sync=True)
-    _view_module_version = Unicode('^2.0.1').tag(sync=True)
-    _model_module_version = Unicode('^2.0.1').tag(sync=True)
+    _view_module_version = Unicode('^2.0.2').tag(sync=True)
+    _model_module_version = Unicode('^2.0.2').tag(sync=True)
+
     widget_id = Int(-1).tag(sync=True)
-    tags = List().tag(sync=True)
+
+    tags = List([]).tag(sync=True)
     txt = Unicode('').tag(sync=True)
     colors = List([]).tag(sync=True)
     callback = Any()
     res = List([]).tag(sync=True)
 
-    def __init__(self, tags=[], txt='', colors=set(), callback=None):
+    def __init__(self, tags=[], txt='', colors=None, callback=None):
         super(Widget, self).__init__()
-        self.widget_id = Widget.id
-        Widget.id += 1
-        self.tags = tags
-        assert len(txt) > 0, "txt shouldn't be an empty string"
+
+        self.widget_id = Widget.__id
+        Widget.__id += 1
+
+        if len(txt) == 0: raise ValueError("txt shouldn't be an empty string")
         self.txt = txt
-        colors = set(colors)
-        if len(colors) == 0:
+        if (colors is None) or (colors == []):
             self.colors = [
                 '#ff0000',
                 '#ff8000',
@@ -39,6 +52,10 @@ class Widget(widgets.DOMWidget, HasTraits):
                 '#ff00ff'
             ]
         else:
-            self.colors = list(colors)
-        assert len(tags) <= len(self.colors), 'you should have at least one unique color for each tag'
+            if len(colors) != len(set(colors)): raise ValueError("colors shouldn't contain duplicates")
+            self.colors = colors
+
+        if len(tags) > len(self.colors): raise ValueError('colors should contain at least one unique color for each tag')
+        self.tags = tags
+
         self.observe(callback, names=['res'])

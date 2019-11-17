@@ -7,8 +7,8 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     _view_name: "TSWidgetView",
     _model_module: "text_selector",
     _view_module: "text_selector",
-    _model_module_version: "2.0.1",
-    _view_module_version: "2.0.1",
+    _model_module_version: "2.0.3",
+    _view_module_version: "2.0.3",
     widget_id: -1,
     tags: [],
     txt: '',
@@ -64,6 +64,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     add.innerText = "Add";
     add.classList.add('btn');
     add.onclick = () => {
+      // console.log(this.selected_tag_id);
       let selection = window.getSelection();
       let selected_id;
       try {
@@ -98,7 +99,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       }
       for (let i = left; i <= right; i++) {
         let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
-        // console.log(this.colors[this.selected_tag_id]);
         tmp_el.style.background = this.colors[this.selected_tag_id];
       }
       this.res.push({
@@ -112,19 +112,25 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     };
     dom_controls.appendChild(add);
 
-    select_tag = document.createElement("select");
-    select_tag.id = "TSW-selector";
+    select = document.createElement("select");
+    select.id = `TSW-widget-${this.widget_id}-select`;
+    select.onchange = () => {
+      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
+      console.log(selected);
+      this.selected_tag_id = selected;
+    };
     this.tags.forEach((item, idx) => {
+      // console.log(item, idx);
       let tag_dom_el;
       tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
       tag_dom_el.value = idx;
       tag_dom_el.onclick = () => {
         this.selected_tag_id = idx;
-      };
-      select_tag.appendChild(tag_dom_el);
+      }
+      select.appendChild(tag_dom_el);
     });
-    dom_controls.appendChild(select_tag);
+    dom_controls.appendChild(select);
 
     let rem = document.createElement("button");
     rem.id = 'TSW-rem'
