@@ -9,8 +9,8 @@ Use the widget with the active learning tool:
 Usage:
 ------
 
-An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)
-Note if you have less than 10 tags you don't need to pass colors, otherwise you have too.
+An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)\
+Note: if you have less than 10 tags you don't need to pass colors, otherwise you have too.
 
 Installation
 ------------
@@ -30,8 +30,8 @@ To create and start docker container run:
 
     $ git clone https://github.com/randomunrandom/text_selector.git
     $ cd text_selector
-    $ docker build -t text_selector .  
-    $ docker run -p 8888:8888 -it --rm --name text_selector text_selector  
+    $ docker build -t text_selector .
+    $ docker run -p 8888:8888 -it --rm --name text_selector text_selector
 
 if port 8888 is occupied change ${port} to any available port
 
