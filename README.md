@@ -1,13 +1,16 @@
 text_selector
 ===============================
 
-A Custom Jupyter Widget for selecting part of text and assingning it one of tags.
+A Custom Jupyter Widget for selecting part of text and assingning it one of tags.  
+
+Use the widget with the active learning tool:  
+[https://github.com/IINemo/active_learning_toolbox/tree/seq](https://github.com/IINemo/active_learning_toolbox/tree/seq)
 
 Usage:
 ------
 
-An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)
-Note^ if you have less than 10 tags you don't need to pass colors, otherwise you have too.
+An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)\
+Note: if you have less than 10 tags you don't need to pass colors, otherwise you have too.
 
 Installation
 ------------
@@ -33,3 +36,18 @@ To create and start docker container run:
 if port 8888 is occupied change ${port} to any available port
 
     $ docker run -p ${port}:8888 -it --rm --name text_selector text_selector
+
+
+Cite
+------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@inproceedings{shelmanov2019bibm,
+    title={Active Learning with Deep Pre-trained Models for Sequence Tagging of Clinical and Biomedical Texts},
+    author={Artem Shelmanov and Vadim Liventsev and Danil Kireev and Nikita Khromov and Alexander Panchenko and Irina Fedulova and Dmitry V. Dylov},
+    booktitle={Proceedings of International Conference on Bioinformatics & Biomedicine (BIBM)},
+    year={2019}
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
