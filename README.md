@@ -33,3 +33,21 @@ To create and start docker container run:
 if port 8888 is occupied change ${port} to any available port
 
     $ docker run -p ${port}:8888 -it --rm --name text_selector text_selector
+
+Use the widget with active learning tool:
+[](https://github.com/IINemo/active_learning_toolbox/tree/seq)
+
+
+Cite
+------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@inproceedings{shelmanov2019bibm,
+    title={Active Learning with Deep Pre-trained Models for Sequence Tagging of Clinical and Biomedical Texts},
+    author={Artem Shelmanov and Vadim Liventsev and Danil Kireev and Nikita Khromov and Alexander Panchenko and Irina Fedulova and Dmitry V. Dylov},
+    booktitle={Proceedings of International Conference on Bioinformatics & Biomedicine (BIBM)},
+    year={2019}
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
