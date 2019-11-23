@@ -1,4 +1,4 @@
-A Custom Jupyter Widget Library
+A Jupyter extension for selecting tags in text with mouse
 
 Package Install
 ---------------

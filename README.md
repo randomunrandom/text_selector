@@ -12,6 +12,14 @@ Note: if you have less than 10 tags you don't need to pass colors, otherwise you
 
 Installation
 ------------
+To install this extension simply run folowing comands:
+    
+    $ pip install text_selector
+    $ jupyter nbextension enable --py --sys-prefix text_selector
+
+To install for jupyterlab
+    $ jupyter labextension install text_selector
+
 For a development installation (requires npm) run in terminal:
 
     $ git clone https://github.com/randomunrandom/text_selector.git
@@ -19,6 +27,7 @@ For a development installation (requires npm) run in terminal:
     $ pip install -e .
     $ jupyter nbextension install --py --symlink --sys-prefix text_selector
     $ jupyter nbextension enable --py --sys-prefix text_selector
+    $ jupyter labextension install js
 
 Docker
 ------

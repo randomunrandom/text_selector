@@ -1,12 +1,12 @@
 {
   "name": "text_selector",
-  "version": "2.0.3",
-  "description": "A Custom Jupyter Widget Library",
+  "version": "2.1.1",
+  "description": "A Jupyter extension for selecting tags in text with mouse",
   "author": "Danil Kireev",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com//text_selector.git"
+    "url": "https://github.com/randomunrandom/text_selector.git"
   },
   "keywords": [
     "jupyter",
