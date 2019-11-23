@@ -116,7 +116,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     select.id = `TSW-widget-${this.widget_id}-select`;
     select.onchange = () => {
       selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
-      console.log(selected);
+      // console.log(selected);
       this.selected_tag_id = selected;
     };
     this.tags.forEach((item, idx) => {
@@ -132,11 +132,66 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     });
     dom_controls.appendChild(select);
 
+
     let rem = document.createElement("button");
-    rem.id = 'TSW-rem'
+    rem.id = `TSW-widget-${this.widget_id}-rem`;
+    rem.innerText = "Remove";
     rem.classList.add('btn');
-    rem.innerText = "Reset";
     rem.onclick = () => {
+      // console.log(this.selected_tag_id);
+      let selection = window.getSelection();
+      let selected_id;
+      try {
+        selected_id = selection.anchorNode.parentNode.id.replace('TSW-widget-', '').replace('-letter-\d+', '');
+        selected_id = parseInt(selected_id, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      if (selected_id !== this.widget_id) return 
+      let start, end, left, right;
+      try {
+        start = selection.anchorNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
+        start = parseInt(start, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      try {
+        end = selection.focusNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
+        end = parseInt(end, 10);
+      } catch(e) {
+        console.log('error in parsing selection ', e)
+        return
+      }
+      if (start < end) {
+        left = start;
+        right = end;
+      } else {
+        left = end;
+        right = start;
+      }
+      this.res.forEach((r, idx) => {
+        if ((r.start >= left) && (r.end <= right)) {
+          console.log(r, idx);
+          for (let i = r.start; i <= r.end; i++) {
+            let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.style.background = '';
+          }
+          this.res.splice(idx, 1);
+        }
+      });
+      this.model.set("res", this.res);
+      this.model.save();
+      this.model.save_changes();
+    };
+    dom_controls.appendChild(rem);
+
+    let res = document.createElement("button");
+    res.id = 'TSW-res'
+    res.classList.add('btn');
+    res.innerText = "Reset";
+    res.onclick = () => {
       for (r of this.res) {
         for(let i = r['start']; i<= r['end']; i++) {
           let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
@@ -148,7 +203,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       this.model.save();
       this.model.save_changes();
     };
-    dom_controls.appendChild(rem);
+    dom_controls.appendChild(res);
     return dom_controls;
   },
 });
