@@ -18,6 +18,7 @@ To install this extension simply run folowing comands:
     $ jupyter nbextension enable --py --sys-prefix text_selector
 
 To install for jupyterlab
+
     $ jupyter labextension install text_selector
 
 For a development installation (requires npm) run in terminal:
