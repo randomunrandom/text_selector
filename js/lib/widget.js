@@ -26,6 +26,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.res = this.model.get("res");
 
     this.selected_tag_id = 0;
+    this.old_res = [];
+    this.dis = true;
 
     this.box = document.createElement("div");
     this.box.id = `TSW-widget-${this.widget_id}`;
@@ -58,6 +60,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
   create_controls() {
     let dom_controls = document.createElement("div");
     dom_controls.id = `TSW-widget-${this.widget_id}-controls`;
+    dom_controls.style.display = "inline";
 
     let add = document.createElement("button");
     add.id = `TSW-widget-${this.widget_id}-add`;
@@ -204,6 +207,51 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       this.model.save_changes();
     };
     dom_controls.appendChild(res);
+
+    let done_inp = document.createElement("input");
+    done_inp.id = "TSW-done";
+    done_inp.type = "checkbox";
+    done_inp.name = "Done";
+    done_inp.value = "Done";
+    done_inp.onclick = () => {
+      this.dis = !this.dis;
+      if (this.dis) {
+        add.removeAttribute("disabled");
+        rem.removeAttribute("disabled");
+        res.removeAttribute("disabled");
+        sel = document.getElementById(`TSW-widget-${this.widget_id}-select`);
+        sel.removeAttribute("disabled");
+        this.res = this.old_res;
+        for (r of this.res) {
+          for(let i = r['start']; i<= r['end']; i++) {
+            let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.style.background = this.colors[this.tags.indexOf(r.tag)];
+          }
+        }
+      } else {
+        add.disabled = "disabled";
+        rem.disabled = "disabled";
+        res.disabled = "disabled";
+        sel = document.getElementById(`TSW-widget-${this.widget_id}-select`);
+        sel.disabled = "disabled";
+        this.old_res = this.res;
+        for (r of this.res) {
+          for(let i = r['start']; i<= r['end']; i++) {
+            let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.style.background = '';
+          }
+        }
+        this.res = [ "None" ];
+      }
+      this.model.set("res", this.res);
+      this.model.save();
+      this.model.save_changes();
+    };
+    let done = document.createElement("span");
+    done.appendChild(done_inp);
+    done.appendChild(document.createTextNode("Done"));
+    dom_controls.appendChild(done);
+
     return dom_controls;
   },
 });

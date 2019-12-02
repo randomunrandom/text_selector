@@ -10,6 +10,13 @@ Usage:
 An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)\
 Note: if you have less than 10 tags you don't need to pass colors, otherwise you have too.
 
+The result is represented via widgets public field `res`.
+It can be in 1 of 3 states:
+1. Empty: nobody selected anything in widget
+2. Containing string of `None`: user checked this widget as "Done"
+3. Containing dicts with selected sequences
+
+
 Installation
 ------------
 To install this extension simply run folowing comands:
