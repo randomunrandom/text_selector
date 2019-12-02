@@ -13,7 +13,7 @@ Note: if you have less than 10 tags you don't need to pass colors, otherwise you
 The result is represented via widgets public field `res`.
 It can be in 1 of 3 states:
 1. Empty: nobody selected anything in widget
-2. Containing string of `None`: user checked this widget as "Done"
+2. Containing string of `None`: text doesn;t contain any squences and user checked this widget as "Done"
 3. Containing dicts with selected sequences
 
 
