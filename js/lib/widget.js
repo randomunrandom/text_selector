@@ -100,6 +100,11 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         left = end;
         right = start;
       }
+      let l_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${left}`).innerText;
+      if (l_txt === ' ') left += 1;
+      let r_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${right}`).innerText;
+      if (r_txt === ' ') right -= 1;
+
       for (let i = left; i <= right; i++) {
         let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
         tmp_el.style.background = this.colors[this.selected_tag_id];
@@ -119,11 +124,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     select.id = `TSW-widget-${this.widget_id}-select`;
     select.onchange = () => {
       selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
-      // console.log(selected);
       this.selected_tag_id = selected;
     };
     this.tags.forEach((item, idx) => {
-      // console.log(item, idx);
       let tag_dom_el;
       tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
@@ -141,7 +144,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     rem.innerText = "Remove";
     rem.classList.add('btn');
     rem.onclick = () => {
-      // console.log(this.selected_tag_id);
       let selection = window.getSelection();
       let selected_id;
       try {
@@ -176,7 +178,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       }
       this.res.forEach((r, idx) => {
         if ((r.start >= left) && (r.end <= right)) {
-          console.log(r, idx);
           for (let i = r.start; i <= r.end; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
             tmp_el.style.background = '';
