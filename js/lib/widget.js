@@ -13,6 +13,7 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     tags: [],
     txt: '',
     colors: [],
+    dis: true,
     res: []
   })
 });
@@ -24,10 +25,11 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.txt = this.model.get("txt");
     this.colors = this.model.get("colors");
     this.res = this.model.get("res");
+    this.dis = this.model.get("dis");
 
     this.selected_tag_id = 0;
     this.old_res = [];
-    this.dis = true;
+    
 
     this.box = document.createElement("div");
     this.box.id = `TSW-widget-${this.widget_id}`;
@@ -216,6 +218,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.value = "Done";
     done_inp.onclick = () => {
       this.dis = !this.dis;
+      this.model.set("dis", this.dis);
+      this.model.save();
+      this.model.save_changes();
       if (this.dis) {
         add.removeAttribute("disabled");
         rem.removeAttribute("disabled");

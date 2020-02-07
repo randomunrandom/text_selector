@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from traitlets import HasTraits, Unicode, List, Int, Any, observe
+from traitlets import HasTraits, Unicode, List, Int, Any, observe, Bool
 
 
 @widgets.register
@@ -29,6 +29,7 @@ class Widget(widgets.DOMWidget, HasTraits):
     txt = Unicode('').tag(sync=True)
     colors = List([]).tag(sync=True)
     callback = Any()
+    dis = Bool(True).tag()
     res = List([]).tag(sync=True)
 
     def __init__(self, tags=[], txt='', colors=None, callback=None):
