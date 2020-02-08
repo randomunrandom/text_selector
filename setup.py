@@ -127,7 +127,7 @@ with open(os.path.join(here, 'text_selector', '_version.py')) as f:
 setup_args = {
     'name': 'text_selector',
     'version': version_ns['__version__'],
-    'description': 'A Custom Jupyter Widget Library for selecting text and asciening tag to selected span',
+    'description': 'A Custom Jupyter Widget Library for selecting text and assigning tag to selected span',
     'long_description': LONG_DESCRIPTION,
     'long_description_content_type': 'text/markdown',
     'include_package_data': True,
