@@ -29,10 +29,11 @@ class Widget(widgets.DOMWidget, HasTraits):
     txt = Unicode('').tag(sync=True)
     colors = List([]).tag(sync=True)
     callback = Any()
-    dis = Bool(True).tag()
+    emojify = Bool(False).tag(sync=True)
+    dis = Bool(True).tag(sync=True)
     res = List([]).tag(sync=True)
 
-    def __init__(self, tags=[], txt='', colors=None, callback=None):
+    def __init__(self, tags=[], txt='', colors=None, callback=None, emojify=False):
         super(Widget, self).__init__()
 
         self.widget_id = Widget.__id
@@ -60,3 +61,5 @@ class Widget(widgets.DOMWidget, HasTraits):
         self.tags = tags
 
         self.observe(callback, names=['res'])
+
+        self.emojify = emojify
