@@ -1,6 +1,6 @@
 {
   "name": "text_selector",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A Jupyter extension for selecting tags in text with mouse",
   "author": "Danil Kireev",
   "main": "lib/index.js",
