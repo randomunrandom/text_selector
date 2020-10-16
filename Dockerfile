@@ -11,7 +11,7 @@ RUN apt-get install -y \
     curl \
     gcc g++ make
 
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y \
     python3.7 python3-pip python3.7-dev python3-distutils-extra \
     nodejs
