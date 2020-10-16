@@ -21,12 +21,12 @@ RUN rm -rf /var/lib/apt/lists/*
 WORKDIR /text_selector
 COPY . /text_selector/
 
-RUN chmod a+rwx /usr/etc/jupyter/nbconfig
-RUN chmod a+rwx /usr/local/share/jupyter
-
 RUN python3 -m install jupyterlab
 RUN python3 -m install -e .
 RUN jupyter nbextension install --py --symlink --sys-prefix text_selector
 RUN jupyter nbextension enable --py --sys-prefix text_selector
+
+RUN chmod a+rwx /usr/etc/jupyter/nbconfig
+RUN chmod a+rwx /usr/local/share/jupyter
 
 CMD jupyter notebook --no-browser --ip=0.0.0.0 --port=8888 --allow-root --notebook-dir='/text_selector'
