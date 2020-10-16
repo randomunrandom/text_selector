@@ -7,7 +7,7 @@ Use the widget with the active learning tool:
 
 Usage:
 ------
-An example of use case can be found in [example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/example.ipynb)\
+An example of use case can be found in [workspace/example.ipynb](https://github.com/randomunrandom/text_selector/blob/master/workspace/example.ipynb)\
 Note: if you have less than 10 tags you don't need to pass colors, otherwise you have too.
 
 The result is represented via widgets public field `res`.
