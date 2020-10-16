@@ -21,8 +21,8 @@ RUN rm -rf /var/lib/apt/lists/*
 WORKDIR /text_selector
 COPY . /text_selector/
 
-RUN python3 -m install jupyterlab
-RUN python3 -m install -e .
+RUN python3 -m pip install jupyterlab
+RUN python3 -m pip install -e .
 RUN jupyter nbextension install --py --symlink --sys-prefix text_selector
 RUN jupyter nbextension enable --py --sys-prefix text_selector
 
