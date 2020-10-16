@@ -2,5 +2,4 @@ image:
   file: Dockerfile
 
 tasks:
-  - command: echo Terminal1
-
+  - command: jupyter notebook --no-browser --ip=0.0.0.0 --port=8888 --allow-root --notebook-dir='/text_selector'
