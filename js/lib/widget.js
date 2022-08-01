@@ -163,6 +163,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.name = "Done";
     done_inp.value = "Done";
     done_inp.id = "Done";
+    done_inp.style.marginLeft = "0.5em";
+    done_inp.style.marginRight = "0.5em";
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
@@ -203,7 +205,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     let done_label = document.createElement("label");
     done_label.htmlFor = done_inp.id;
-    done_label.style.marginLeft = "0.5em";
     done_label.append(document.createTextNode("Nothing to label"))
 
     let done = document.createElement("span");
