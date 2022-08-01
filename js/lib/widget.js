@@ -160,7 +160,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     let done_inp = document.createElement("input");
     done_inp.type = "checkbox";
     done_inp.name = "Done";
-    done_inp.value = "Done";
+    done_inp.value = "Nothing to label";
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
