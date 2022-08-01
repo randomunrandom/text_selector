@@ -36,7 +36,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.box = document.createElement("div");
     this.box.id = `TSW-widget-${this.widget_id}`;
     // this.box.style.border = "1px solid black";
-    // this.box.style.padding = "1%";
+    // this.box.style.padding = "0 5%";
+    this.box.style.width = "95%";
 
     this.box.appendChild(this.create_controls());
     this.box.appendChild(this.create_txt());
@@ -66,21 +67,17 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     dom_controls.id = `TSW-widget-${this.widget_id}-controls`;
     dom_controls.style.display = "inline";
 
-    let select = document.createElement("span");
-    select.classList.add("p-Widget");
-    select.classList.add("jupyter-widgets");
-    // select.classList.add("widget-inline-hbox");
-    select.classList.add("widget-dropdown");
-
     let select_dd = document.createElement("select");
+    select_dd.style.marginTop = "2px";
+    select_dd.style.marginBottom = "2px";
     select_dd.id = `TSW-widget-${this.widget_id}-select`;
     select_dd.onchange = () => {
-      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
+      selectedIndex = document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex
+      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[selectedIndex].value;
       this.selected_tag_id = selected;
     };
     this.tags.forEach((item, idx) => {
-      let tag_dom_el;
-      tag_dom_el = document.createElement("option");
+      let tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
       tag_dom_el.value = idx;
       tag_dom_el.onclick = () => {
@@ -88,6 +85,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       }
       select_dd.appendChild(tag_dom_el);
     });
+
+    let select = document.createElement("span");
+    select.classList.add("jupyter-widgets");
+    select.classList.add("widget-dropdown");
     select.appendChild(select_dd);
     dom_controls.appendChild(select);
 
@@ -161,8 +162,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.type = "checkbox";
     done_inp.name = "Done";
     done_inp.value = "Done";
+    done_inp.id = "Done";
     done_inp.style.marginLeft = "0.5em";
     done_inp.style.marginRight = "0.5em";
+
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
@@ -200,10 +203,15 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       this.model.save();
       this.model.save_changes();
     };
+
+    let done_label = document.createElement("label");
+    done_label.htmlFor = done_inp.id;
+    done_label.append(document.createTextNode("Nothing to label"))
+
     let done = document.createElement("span");
     done.id = "TSW-done";
     done.appendChild(done_inp);
-    done.appendChild(document.createTextNode(" Nothing to label"));
+    done.appendChild(done_label);
     dom_controls.appendChild(done);
 
     let res = document.createElement("button");
