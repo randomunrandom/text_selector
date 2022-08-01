@@ -37,7 +37,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.box.id = `TSW-widget-${this.widget_id}`;
     // this.box.style.border = "1px solid black";
     // this.box.style.padding = "0 5%";
-    this.box.style.width = "95%";
+    // this.box.style.width = "95%";
 
     this.box.appendChild(this.create_controls());
     this.box.appendChild(this.create_txt());
