@@ -161,6 +161,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.type = "checkbox";
     done_inp.name = "Done";
     done_inp.value = "Done";
+    done_inp.style.marginLeft = "0.5em";
+    done_inp.style.marginRight = "0.5em";
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
