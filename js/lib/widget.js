@@ -201,7 +201,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     let done = document.createElement("span");
     done.id = "TSW-done";
     done.appendChild(done_inp);
-    done.appendChild(document.createTextNode("Nothing to label"));
+    done.appendChild(document.createTextNode(" Nothing to label"));
     dom_controls.appendChild(done);
 
     let res = document.createElement("button");
