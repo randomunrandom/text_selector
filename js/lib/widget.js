@@ -36,7 +36,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.box = document.createElement("div");
     this.box.id = `TSW-widget-${this.widget_id}`;
     // this.box.style.border = "1px solid black";
-    // this.box.style.padding = "1%";
+    // this.box.style.padding = "0 5%";
+    this.box.style.width = "95%";
 
     this.box.appendChild(this.create_controls());
     this.box.appendChild(this.create_txt());
@@ -161,6 +162,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.type = "checkbox";
     done_inp.name = "Done";
     done_inp.value = "Done";
+    done_inp.id = "Done";
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
@@ -198,10 +200,16 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       this.model.save();
       this.model.save_changes();
     };
+
+    let done_label = document.createElement("label");
+    done_label.htmlFor = done_inp.id;
+    done_label.style.marginLeft = "0.5em";
+    done_label.append(document.createTextNode("Nothing to label"))
+
     let done = document.createElement("span");
     done.id = "TSW-done";
     done.appendChild(done_inp);
-    done.appendChild(document.createTextNode("Done"));
+    done.appendChild(done_label);
     dom_controls.appendChild(done);
 
     let res = document.createElement("button");
