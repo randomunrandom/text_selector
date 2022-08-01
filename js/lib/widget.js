@@ -67,21 +67,17 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     dom_controls.id = `TSW-widget-${this.widget_id}-controls`;
     dom_controls.style.display = "inline";
 
-    let select = document.createElement("span");
-    select.classList.add("p-Widget");
-    select.classList.add("jupyter-widgets");
-    // select.classList.add("widget-inline-hbox");
-    select.classList.add("widget-dropdown");
-
     let select_dd = document.createElement("select");
+    select_dd.style.marginTop = "2px";
+    select_dd.style.marginBottom = "2px";
     select_dd.id = `TSW-widget-${this.widget_id}-select`;
     select_dd.onchange = () => {
-      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
+      selectedIndex = document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex
+      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[selectedIndex].value;
       this.selected_tag_id = selected;
     };
     this.tags.forEach((item, idx) => {
-      let tag_dom_el;
-      tag_dom_el = document.createElement("option");
+      let tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
       tag_dom_el.value = idx;
       tag_dom_el.onclick = () => {
@@ -89,6 +85,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       }
       select_dd.appendChild(tag_dom_el);
     });
+
+    let select = document.createElement("span");
+    select.classList.add("jupyter-widgets");
+    select.classList.add("widget-dropdown");
     select.appendChild(select_dd);
     dom_controls.appendChild(select);
 
@@ -165,6 +165,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.id = "Done";
     done_inp.style.marginLeft = "0.5em";
     done_inp.style.marginRight = "0.5em";
+
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
