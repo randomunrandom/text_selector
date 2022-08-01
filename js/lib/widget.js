@@ -46,7 +46,6 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
   create_txt() {
     let dom_txt = document.createElement("div");
     dom_txt.id = `TSW-widget-${this.widget_id}-txt`;
-    dom_txt.style["border-bottom"] = "1px solid gray";
     dom_txt.style.margin = "1em auto";
     for (let i = 0; i < this.txt.length; i++) {
       let tmp = document.createElement("span");
