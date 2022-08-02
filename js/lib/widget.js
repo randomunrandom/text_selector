@@ -48,7 +48,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     dom_txt.id = `TSW-widget-${this.widget_id}-txt`;
     dom_txt.style.margin = "1em auto";
     for (let i = 0; i < this.txt.length; i++) {
-      let tmp = document.createElement("span");
+      let tmp = document.createElement("abbr");
       tmp.innerText = this.txt.charAt(i);
       tmp.id = `TSW-widget-${this.widget_id}-letter-${i}`;
       dom_txt.appendChild(tmp);
@@ -56,6 +56,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     for(r of this.res){
       for(let i = r['start']; i<= r['end']; i++) {
         let letter = dom_txt.querySelector(`#TSW-widget-${this.widget_id}-letter-${i}`);
+        letter.title = r['tag'];
         letter.style.background = this.colors[this.tags.indexOf(r['tag'])];
       }
     }
@@ -115,6 +116,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         return
       }
       if (selected_id !== this.widget_id) return 
+      
       let start, end, left, right;
       try {
         start = selection.anchorNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
@@ -130,6 +132,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         console.log('error in parsing selection ', e)
         return
       }
+
       if (start < end) {
         left = start;
         right = end;
@@ -137,15 +140,19 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         left = end;
         right = start;
       }
+
       let l_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${left}`).innerText;
       if (l_txt === ' ') left += 1;
+
       let r_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${right}`).innerText;
       if (r_txt === ' ') right -= 1;
 
       for (let i = left; i <= right; i++) {
         let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+        tmp_el.title = this.tags[this.selected_tag_id];
         tmp_el.style.background = this.colors[this.selected_tag_id];
       }
+
       this.res.push({
         start: left,
         end: right,
@@ -180,6 +187,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         for (r of this.res) {
           for(let i = r['start']; i<= r['end']; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.title = r.tag;
             tmp_el.style.background = this.colors[this.tags.indexOf(r.tag)];
           }
         }
@@ -193,6 +201,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         for (r of this.res) {
           for(let i = r['start']; i<= r['end']; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.removeAttribute("title")
             tmp_el.style.background = '';
           }
         }
