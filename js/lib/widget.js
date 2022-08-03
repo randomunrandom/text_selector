@@ -36,7 +36,8 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     this.box = document.createElement("div");
     this.box.id = `TSW-widget-${this.widget_id}`;
     // this.box.style.border = "1px solid black";
-    // this.box.style.padding = "1%";
+    // this.box.style.padding = "0 5%";
+    this.box.style.width = "95%";
 
     this.box.appendChild(this.create_controls());
     this.box.appendChild(this.create_txt());
@@ -45,10 +46,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
   create_txt() {
     let dom_txt = document.createElement("div");
     dom_txt.id = `TSW-widget-${this.widget_id}-txt`;
-    dom_txt.style["border-bottom"] = "1px solid gray";
     dom_txt.style.margin = "1em auto";
     for (let i = 0; i < this.txt.length; i++) {
-      let tmp = document.createElement("span");
+      let tmp = document.createElement("abbr");
       tmp.innerText = this.txt.charAt(i);
       tmp.id = `TSW-widget-${this.widget_id}-letter-${i}`;
       dom_txt.appendChild(tmp);
@@ -56,6 +56,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     for(r of this.res){
       for(let i = r['start']; i<= r['end']; i++) {
         let letter = dom_txt.querySelector(`#TSW-widget-${this.widget_id}-letter-${i}`);
+        letter.title = r['tag'];
         letter.style.background = this.colors[this.tags.indexOf(r['tag'])];
       }
     }
@@ -66,21 +67,17 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     dom_controls.id = `TSW-widget-${this.widget_id}-controls`;
     dom_controls.style.display = "inline";
 
-    let select = document.createElement("span");
-    select.classList.add("p-Widget");
-    select.classList.add("jupyter-widgets");
-    // select.classList.add("widget-inline-hbox");
-    select.classList.add("widget-dropdown");
-
     let select_dd = document.createElement("select");
+    select_dd.style.marginTop = "2px";
+    select_dd.style.marginBottom = "2px";
     select_dd.id = `TSW-widget-${this.widget_id}-select`;
     select_dd.onchange = () => {
-      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex].value;
+      selectedIndex = document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex
+      selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[selectedIndex].value;
       this.selected_tag_id = selected;
     };
     this.tags.forEach((item, idx) => {
-      let tag_dom_el;
-      tag_dom_el = document.createElement("option");
+      let tag_dom_el = document.createElement("option");
       tag_dom_el.innerText = item;
       tag_dom_el.value = idx;
       tag_dom_el.onclick = () => {
@@ -88,6 +85,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       }
       select_dd.appendChild(tag_dom_el);
     });
+
+    let select = document.createElement("span");
+    select.classList.add("jupyter-widgets");
+    select.classList.add("widget-dropdown");
     select.appendChild(select_dd);
     dom_controls.appendChild(select);
 
@@ -115,6 +116,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         return
       }
       if (selected_id !== this.widget_id) return 
+      
       let start, end, left, right;
       try {
         start = selection.anchorNode.parentNode.id.replace(/TSW-widget-\d+-letter-/i, "");
@@ -130,6 +132,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         console.log('error in parsing selection ', e)
         return
       }
+
       if (start < end) {
         left = start;
         right = end;
@@ -137,15 +140,19 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         left = end;
         right = start;
       }
+
       let l_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${left}`).innerText;
       if (l_txt === ' ') left += 1;
+
       let r_txt = document.getElementById(`TSW-widget-${this.widget_id}-letter-${right}`).innerText;
       if (r_txt === ' ') right -= 1;
 
       for (let i = left; i <= right; i++) {
         let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+        tmp_el.title = this.tags[this.selected_tag_id];
         tmp_el.style.background = this.colors[this.selected_tag_id];
       }
+
       this.res.push({
         start: left,
         end: right,
@@ -161,6 +168,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.type = "checkbox";
     done_inp.name = "Done";
     done_inp.value = "Done";
+    done_inp.id = "Done";
+    done_inp.style.marginLeft = "0.5em";
+    done_inp.style.marginRight = "0.5em";
+
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
@@ -176,6 +187,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         for (r of this.res) {
           for(let i = r['start']; i<= r['end']; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.title = r.tag;
             tmp_el.style.background = this.colors[this.tags.indexOf(r.tag)];
           }
         }
@@ -189,6 +201,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         for (r of this.res) {
           for(let i = r['start']; i<= r['end']; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
+            tmp_el.removeAttribute("title")
             tmp_el.style.background = '';
           }
         }
@@ -198,10 +211,15 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       this.model.save();
       this.model.save_changes();
     };
+
+    let done_label = document.createElement("label");
+    done_label.htmlFor = done_inp.id;
+    done_label.append(document.createTextNode("Nothing to label"))
+
     let done = document.createElement("span");
     done.id = "TSW-done";
     done.appendChild(done_inp);
-    done.appendChild(document.createTextNode("Nothing to label"));
+    done.appendChild(done_label);
     dom_controls.appendChild(done);
 
     let res = document.createElement("button");
