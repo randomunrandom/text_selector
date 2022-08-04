@@ -240,6 +240,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
         for(let i = r['start']; i<= r['end']; i++) {
           let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
           tmp_el.style.background = '';
+          tmp_el.removeAttribute("title")
         }
       }
       this.res = [];
@@ -300,6 +301,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
           for (let i = r.start; i <= r.end; i++) {
             let tmp_el = document.getElementById(`TSW-widget-${this.widget_id}-letter-${i}`);
             tmp_el.style.background = '';
+            tmp_el.removeAttribute("title")
           }
           this.res.splice(idx, 1);
         }
