@@ -53,11 +53,19 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
       tmp.id = `TSW-widget-${this.widget_id}-letter-${i}`;
       dom_txt.appendChild(tmp);
     }
+    if (!this.dis) {
+      this.old_res = this.res;
+    }
     for(r of this.res){
       for(let i = r['start']; i<= r['end']; i++) {
         let letter = dom_txt.querySelector(`#TSW-widget-${this.widget_id}-letter-${i}`);
-        letter.title = r['tag'];
-        letter.style.background = this.colors[this.tags.indexOf(r['tag'])];
+        if (!this.dis) {
+          letter.removeAttribute("title")
+          letter.style.background = '';
+        } else {
+          letter.title = r['tag'];
+          letter.style.background = this.colors[this.tags.indexOf(r['tag'])];
+        }
       }
     }
     return dom_txt;
@@ -71,6 +79,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     select_dd.style.marginTop = "2px";
     select_dd.style.marginBottom = "2px";
     select_dd.id = `TSW-widget-${this.widget_id}-select`;
+    if (!this.dis) {
+      select_dd.disabled = "disabled";
+    }
     select_dd.onchange = () => {
       selectedIndex = document.getElementById(`TSW-widget-${this.widget_id}-select`).selectedIndex
       selected = document.getElementById(`TSW-widget-${this.widget_id}-select`)[selectedIndex].value;
@@ -94,6 +105,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     let add = document.createElement("button");
     add.id = `TSW-widget-${this.widget_id}-add`;
+    if (!this.dis) {
+      add.disabled = "disabled";
+    }
     if (this.emojify) {
       add.innerText += "Add ➕";
     } else {
@@ -168,9 +182,10 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.type = "checkbox";
     done_inp.name = "Done";
     done_inp.value = "Done";
-    done_inp.id = "Done";
+    done_inp.id = `TSW-widget-${this.widget_id}-done`;
     done_inp.style.marginLeft = "0.5em";
     done_inp.style.marginRight = "0.5em";
+    done_inp.checked = !this.dis;
 
     done_inp.onclick = () => {
       this.dis = !this.dis;
@@ -224,6 +239,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     let res = document.createElement("button");
     res.id = 'TSW-res'
+    if (!this.dis) {
+      res.disabled = "disabled";
+    }
     res.classList.add('p-Widget');
     res.classList.add('btn');
     res.classList.add('jupyter-widgets');
@@ -263,6 +281,9 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     rem.classList.add('jupyter-widgets');
     rem.classList.add('jupyter-button');
     rem.classList.add('widget-button');
+    if (!this.dis) {
+      rem.disabled = "disabled";
+    }
     rem.onclick = () => {
       let selection = window.getSelection();
       let selected_id;
