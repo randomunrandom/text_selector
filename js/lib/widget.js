@@ -14,7 +14,7 @@ var TSWidgetModel = widgets.DOMWidgetModel.extend({
     txt: '',
     colors: [],
     emojify: false,
-    dis: true,
+    dis: false,
     res: []
   })
 });
@@ -59,7 +59,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     for(r of this.res){
       for(let i = r['start']; i<= r['end']; i++) {
         let letter = dom_txt.querySelector(`#TSW-widget-${this.widget_id}-letter-${i}`);
-        if (!this.dis) {
+        if (this.dis) {
           letter.removeAttribute("title")
           letter.style.background = '';
         } else {
@@ -79,7 +79,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     select_dd.style.marginTop = "2px";
     select_dd.style.marginBottom = "2px";
     select_dd.id = `TSW-widget-${this.widget_id}-select`;
-    if (!this.dis) {
+    if (this.dis) {
       select_dd.disabled = "disabled";
     }
     select_dd.onchange = () => {
@@ -105,7 +105,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     let add = document.createElement("button");
     add.id = `TSW-widget-${this.widget_id}-add`;
-    if (!this.dis) {
+    if (this.dis) {
       add.disabled = "disabled";
     }
     if (this.emojify) {
@@ -185,14 +185,14 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     done_inp.id = `TSW-widget-${this.widget_id}-done`;
     done_inp.style.marginLeft = "0.5em";
     done_inp.style.marginRight = "0.5em";
-    done_inp.checked = !this.dis;
+    done_inp.checked = this.dis;
 
     done_inp.onclick = () => {
       this.dis = !this.dis;
       this.model.set("dis", this.dis);
       this.model.save();
       this.model.save_changes();
-      if (this.dis) {
+      if (!this.dis) {
         add.removeAttribute("disabled");
         rem.removeAttribute("disabled");
         res.removeAttribute("disabled");
@@ -239,7 +239,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
 
     let res = document.createElement("button");
     res.id = 'TSW-res'
-    if (!this.dis) {
+    if (this.dis) {
       res.disabled = "disabled";
     }
     res.classList.add('p-Widget');
@@ -281,7 +281,7 @@ var TSWidgetView = widgets.DOMWidgetView.extend({
     rem.classList.add('jupyter-widgets');
     rem.classList.add('jupyter-button');
     rem.classList.add('widget-button');
-    if (!this.dis) {
+    if (this.dis) {
       rem.disabled = "disabled";
     }
     rem.onclick = () => {

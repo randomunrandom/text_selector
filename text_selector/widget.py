@@ -30,7 +30,7 @@ class Widget(widgets.DOMWidget, HasTraits):
     colors = List([]).tag(sync=True)
     callback = Any()
     emojify = Bool(False).tag(sync=True)
-    dis = Bool(True).tag(sync=True)
+    dis = Bool(False).tag(sync=True)
     res = List([]).tag(sync=True)
 
     def __init__(self, tags=[], txt='', colors=None, callback=None, emojify=False):
@@ -69,13 +69,13 @@ class Widget(widgets.DOMWidget, HasTraits):
         if self.dis:
             return []
         else:
-            return self.res
+            return self.res if self.res else None
     
     @answer.setter
     def answer(self, value: "None | list[dict[str, str|int]]"):
-        if len(value) == 0:
+        if value is not None and len(value) == 0:
             self.res = []
             self.dis = True
         else:
-            self.res = value
+            self.res = [] if value is None else value
             self.dis = False
