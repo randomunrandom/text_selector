@@ -1,1 +1,1 @@
-[{'start': 15, 'end': 20, 'tag': 'DNA'}]
+[{'start': 3, 'end': 9, 'tag': 'protein'}, {'start': 15, 'end': 20, 'tag': 'DNA'}, {'start': 30, 'end': 38, 'tag': 'cell_type'}, {'start': 42, 'end': 50, 'tag': 'cell_line'}, {'start': 58, 'end': 67, 'tag': 'RNA'}]

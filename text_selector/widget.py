@@ -63,3 +63,19 @@ class Widget(widgets.DOMWidget, HasTraits):
         self.observe(callback, names=['res'])
 
         self.emojify = emojify
+    
+    @property
+    def answer(self) -> "None | list[dict[str, str|int]]":
+        if self.dis:
+            return self.res
+        else:
+            return None
+    
+    @answer.setter
+    def answer(self, value: "None | list[dict[str, str|int]]"):
+        if value is None:
+            self.res = []
+            self.dis = False
+        else:
+            self.res = value
+            self.dis = True
