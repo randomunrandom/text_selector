@@ -67,15 +67,15 @@ class Widget(widgets.DOMWidget, HasTraits):
     @property
     def answer(self) -> "None | list[dict[str, str|int]]":
         if self.dis:
-            return self.res
+            return []
         else:
-            return None
+            return self.res
     
     @answer.setter
     def answer(self, value: "None | list[dict[str, str|int]]"):
-        if value is None:
+        if len(value) == 0:
             self.res = []
-            self.dis = False
+            self.dis = True
         else:
             self.res = value
-            self.dis = True
+            self.dis = False
